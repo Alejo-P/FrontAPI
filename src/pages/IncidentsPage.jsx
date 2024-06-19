@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react'
 import IncidentCard from '../components/IncidentCard';
 
 const IncidentsPage = () => {
+    // Enlace a la API de incidentes
     const URL = "http://localhost:3000/api/v1/incidents"
+    // Estado para almacenar los incidentes
     const [incidents, setIncident] = useState([])
 
+    // Función para cargar los incidentes
     useEffect(() => {
         const loadData = async() =>{
-        const response = await fetch(URL);
-        const data = await response.json();
-        setIncident(data);
-        
+            const response = await fetch(URL);
+            const data = await response.json();
+            setIncident(data); // Almacenar los incidentes en el estado
         };
         loadData();
 

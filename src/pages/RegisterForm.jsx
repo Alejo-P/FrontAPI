@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useAuth } from "../context/authContext"
 import DropdownElement from "../components/DropdownElement"
 
 const capitales = {
@@ -27,18 +29,54 @@ const capitales = {
     "Tungurahua": "Ambato",
     "Zamora Chinchipe": "Zamora"
 }
-const ArrayCapitales = Object.values(capitales).sort()
+const ArrayCapitales = Object.keys(capitales).sort()
 const RegisterForm = () => {
+  const {signUp, isAuthenticated, errors: registerError} = useAuth()
+  const [selectedAddress, setSelectedAddress] = useState(''); // Estado para el valor seleccionado en el dropdown
+  const navigate = useNavigate() // Hook para redireccionar a otra página
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const data = {
+      username: e.target.username.value,
+      address: selectedAddress,
+      cellphone: e.target.cellphone.value,
+      age: e.target.age.value,
+      email: e.target.email.value,
+      password: e.target.password.value
+    }
+    signUp(data)
+  }
+
+  useEffect(() => {
+    if(isAuthenticated){
+      navigate('/') // Si la autenticacion es exitosa, redirecciona a la pagina de inicio
+    }
+  }, [isAuthenticated])
   return (
     <div className="contenedor-formulario">
         <h1>Registro</h1>
-        <form className="formulario">
+        {
+          registerError.map((error, i) =>(
+            <div className='elemento-error' key={i}>
+              {error}
+            </div>
+          ))
+        }
+        <form className="formulario" onSubmit={onSubmit}>
             <label htmlFor="username">Nombre de usuario</label>
             <input type="username" id="username" name="username" required />
             <label htmlFor="address">Dirección</label>
-            <DropdownElement valuesForDropList={ArrayCapitales}/>
+            <DropdownElement 
+            valuesForDropList={ArrayCapitales}
+            onChange={(value) => setSelectedAddress(value)}
+            />
             <label htmlFor="email">Correo</label>
             <input type="email" id="email" name="email" required />
+            <label htmlFor="age">Edad</label>
+            <input type="number" id="age" name="age" required />
+            <label htmlFor="cellphone">Número de celular</label>
+            <input type="number" id="cellphone" name="cellphone" required />
             <label htmlFor="password">Contraseña</label>
             <input type="password" id="password" name="password" required />
             <button type="submit">Registrar</button>
