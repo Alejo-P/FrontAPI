@@ -117,6 +117,7 @@
 }
 
 .incident-card{
+  width: 20%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -127,4 +128,46 @@
   background-color: #464646;
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(79, 79, 79, 0.3);
+}
+
+.submit-incident{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+.submit-incident input{
+  padding: .5rem;
+}
+
+.buttons{
+  margin: 0 .5rem;
+  background-color: black;
+  padding:.5rem .7rem;
+  border-radius: 20px;
+  color: white;
+  transition: scale 0.3s;
+}
+.buttons:hover{
+  scale: 1.2;
+}
+
+.delete-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.delete-container p{
+  color: #464646;
+}
+.delete-container button{
+  margin: 0 .2rem;
+  transition: scale 0.3s;
+}
+.delete-container button:hover{
+  scale: 1.2;
+}
+.button-eliminar{
+  background-color: #ff0000;
 }

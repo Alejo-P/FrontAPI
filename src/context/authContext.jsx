@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { loginRequest, registerRequest } from "../api/auth";
+import { loginRequest, registerRequest, submitRequest, editRequest } from "../api/auth";
+
 
 // Crear el contexto de autenticación
 export const AuthContext = createContext();
@@ -15,7 +16,7 @@ export const useAuth = () => {
 
 // Proveedor de autenticación
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,22 +33,20 @@ export const AuthProvider = ({ children }) => {
     const signUp = async (user) => {
         try {
             const response = await registerRequest(user);
-            console.log(response);
-            setUser(response.data);
-            setIsAuthenticated(true);
+            alert("Te has registrado correctamente")
+            return response;
         } catch (error) {
-            console.log(error.response.data);
-            setErrors([error.response.data]);
+            console.log(error);
         }
     };
 
     const signIn = async (user) => {
         try {
             const response = await loginRequest(user);
-            console.log(response);
-            //localStorage.setItem("token", response.data.token);
-            setUser(response.data);
+            console.log(response.data.finduser);
+            setUser(response.data.finduser);
             setIsAuthenticated(true);
+            localStorage.setItem("token", response.data.token);
         } catch (error) {
             console.log(error.response.data);
             if (Array.isArray(error.response.data)) {
@@ -63,6 +62,57 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setIsAuthenticated(false);
     };
+
+    // Crea un incidente en la base de datos
+    const submitIncident = async (data) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token){
+                const response = await submitRequest(data,token);
+                console.log(response);
+            }else{
+                console.log("Token no proporcionado")
+            }
+            
+        } catch (error) {
+            console.log(error.response.data);
+            setErrors(error.response.data.msg);
+        }
+    }
+
+    // Edita un incidente en la base de datos
+    const editIncident = async (id,data) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token){
+                const response = await editRequest(id,data,token);
+                console.log(response);
+            }else{
+                console.log("Token no proporcionado")
+            }
+            
+        } catch (error) {
+            console.log(error.response.data);
+            setErrors(error.response.data.msg);
+        }
+    }
+    
+    // Edita un incidente en la base de datos
+    const deleteIncident = async (id) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token){
+                const response = await editRequest(id,token);
+                console.log(response);
+            }else{
+                console.log("Token no proporcionado")
+            }
+            
+        } catch (error) {
+            console.log(error.response.data);
+            setErrors(error.response.data.msg);
+        }
+    }
 
   function handleDelete(array){
     if (array.length == 0){
@@ -104,7 +154,10 @@ export const AuthProvider = ({ children }) => {
         loading, 
         signUp, 
         signIn, 
-        logOut
+        logOut,
+        submitIncident,
+        editIncident,
+        deleteIncident
     }}>
       {children}
     </AuthContext.Provider>

@@ -14,11 +14,14 @@ const LoginForm = () => {
       password: e.target.password.value
     }
     signIn(data)
+    if (isAuthenticated){
+      navigate('/')
+    }
   }
 
   useEffect(() => {
     if(isAuthenticated){
-      navigate('/') // Si la autenticacion es exitosa, redirecciona a la pagina tasks
+      navigate('/profile') // Si la autenticacion es exitosa, redirecciona a la pagina tasks
     }
   }, [isAuthenticated])
   return (
