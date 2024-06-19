@@ -32,7 +32,7 @@ const capitales = {
 const ArrayCapitales = Object.keys(capitales).sort()
 const RegisterForm = () => {
   const {signUp, isAuthenticated, errors: registerError} = useAuth()
-  const [selectedAddress, setSelectedAddress] = useState(''); // Estado para el valor seleccionado en el dropdown
+  const [selectedAddress, setSelectedAddress] = useState(ArrayCapitales[0]); // Estado para el valor seleccionado en el dropdown
   const navigate = useNavigate() // Hook para redireccionar a otra página
 
   const onSubmit = (e) => {
